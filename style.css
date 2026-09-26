@@ -5,10 +5,11 @@
   --white: #f4f4f0;
   --muted: #a7a7a0;
   --neon-green: #39ff14;
-  --neon-orange: #ff5a00;
+  --neon-orange: #ff6a00;
   --line: rgba(244, 244, 240, 0.14);
   --font-tag: "Bungee", sans-serif;
   --font-marker: "Permanent Marker", cursive;
+  --font-wet: "Rubik Wet Paint", cursive;
   --font-body: "Space Grotesk", sans-serif;
   --space: clamp(1.1rem, 3vw, 2rem);
   --max: 72rem;
@@ -28,6 +29,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-body);
+  font-size: 16px;
   color: var(--white);
   background: var(--black);
   line-height: 1.55;
@@ -144,53 +146,76 @@ a:hover {
   padding: clamp(2rem, 6vh, 4rem) 0 clamp(3rem, 8vh, 5rem);
   isolation: isolate;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
 }
 
-.concrete {
+.hero-bg {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background:
-    radial-gradient(ellipse 70% 50% at 20% 15%, rgba(57, 255, 20, 0.1), transparent 55%),
-    radial-gradient(ellipse 60% 45% at 85% 70%, rgba(255, 90, 0, 0.12), transparent 50%),
-    linear-gradient(160deg, #222 0%, #0f0f0f 40%, #181818 100%);
+  overflow: hidden;
 }
 
-.concrete::before {
-  content: "";
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  display: block;
+  transform: scale(1.04);
+  animation: hero-drift 22s ease-in-out infinite alternate;
+}
+
+.hero-bg-overlay {
   position: absolute;
   inset: 0;
-  opacity: 0.22;
+  background:
+    linear-gradient(180deg, rgba(10, 10, 10, 0.45) 0%, rgba(10, 10, 10, 0.55) 40%, rgba(10, 10, 10, 0.92) 78%, var(--black) 100%),
+    linear-gradient(90deg, rgba(10, 10, 10, 0.55), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 70% 30%, rgba(255, 106, 0, 0.18), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 25% 60%, rgba(57, 255, 20, 0.12), transparent 55%);
+  pointer-events: none;
+}
+
+.hero-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   mix-blend-mode: overlay;
   pointer-events: none;
 }
 
-.concrete::after {
-  content: "";
+.drip {
   position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 38px,
-      rgba(255, 255, 255, 0.015) 38px 39px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 42px,
-      rgba(0, 0, 0, 0.08) 42px 43px
-    );
+  width: 0.35rem;
+  border-radius: 999px;
   pointer-events: none;
+  background: linear-gradient(180deg, var(--neon-green), transparent);
+  opacity: 0.55;
 }
 
-.spray-haze {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 40%;
-  z-index: -1;
-  background: linear-gradient(180deg, transparent, rgba(10, 10, 10, 0.85));
-  pointer-events: none;
+.drip-a {
+  top: 12%;
+  left: 8%;
+  height: 4.5rem;
+  background: linear-gradient(180deg, var(--neon-orange), transparent);
+}
+
+.drip-b {
+  top: 22%;
+  right: 14%;
+  height: 3.2rem;
+}
+
+.drip-c {
+  top: 8%;
+  right: 28%;
+  height: 5.5rem;
+  width: 0.28rem;
+  background: linear-gradient(180deg, var(--neon-orange), transparent);
+  opacity: 0.4;
 }
 
 .hero-inner {
@@ -215,10 +240,15 @@ a:hover {
   line-height: 0.9;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  /* Readable 3D block letters — not wildstyle */
   text-shadow:
-    3px 3px 0 rgba(0, 0, 0, 0.85),
-    -1px -1px 0 rgba(57, 255, 20, 0.35),
-    0 0 40px rgba(255, 90, 0, 0.25);
+    1px 1px 0 #000,
+    2px 2px 0 #000,
+    3px 3px 0 #000,
+    4px 4px 0 #111,
+    5px 5px 0 rgba(0, 0, 0, 0.85),
+    0 0 28px rgba(57, 255, 20, 0.35),
+    0 0 48px rgba(255, 106, 0, 0.28);
   animation: brand-slam 800ms cubic-bezier(0.2, 1.2, 0.3, 1) both;
 }
 
@@ -295,9 +325,10 @@ a:hover {
 
 .latest-kicker {
   margin: 0 0 0.35rem;
-  font-family: var(--font-marker);
+  font-family: var(--font-wet), var(--font-marker), cursive;
   color: var(--neon-orange);
-  font-size: 1.05rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
   transform: rotate(-1deg);
 }
 
@@ -417,6 +448,20 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 1;
+  position: relative;
+}
+
+.section-title::before {
+  content: "";
+  position: absolute;
+  left: -0.2em;
+  top: 40%;
+  width: 2.8em;
+  height: 0.85em;
+  background: radial-gradient(ellipse, rgba(57, 255, 20, 0.35), transparent 70%);
+  filter: blur(8px);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .section-title span {
@@ -428,7 +473,8 @@ a:hover {
     rgba(57, 255, 20, 0.35) 55%
   );
   transform: rotate(-1.5deg);
-  box-shadow: 4px 0 0 rgba(255, 90, 0, 0.55);
+  box-shadow: 4px 0 0 rgba(255, 106, 0, 0.55);
+  text-shadow: 0 0 18px rgba(57, 255, 20, 0.35);
 }
 
 .section-lead {
@@ -789,6 +835,15 @@ a:hover {
   }
 }
 
+@keyframes hero-drift {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.08) translate3d(-1.5%, 1%, 0);
+  }
+}
+
 /* Responsive */
 @media (max-width: 800px) {
   .nav-toggle {
@@ -859,11 +914,16 @@ a:hover {
   .hero-brand,
   .hero-tag,
   .hero-slogan,
+  .hero-bg-img,
   .latest,
   .btn,
   .release,
   .social-link {
     animation: none !important;
     transition: none !important;
+  }
+
+  .hero-bg-img {
+    transform: none;
   }
 }

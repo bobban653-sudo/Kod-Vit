@@ -10,7 +10,7 @@ Sidan är statisk och ligger i rotmappen:
 - `index.html` — innehåll och sektioner
 - `style.css` — design
 
-Byt ut all text inom hakparenteser, till exempel `[Videotitel här]` och `[bokning@…]`, mot riktiga namn och länkar. Verifierade länkar (Spotify, Apple Music, YouTube, TikTok) och diskografin är redan ifyllda. Instagram, spelningar, merch, nyhetsbrev och bokning är fortfarande platshållare.
+Byt ut all text inom hakparenteser, till exempel `[Videotitel här]` och `[bokning@…]`, mot riktiga namn och länkar. Verifierade länkar (Spotify, Apple Music, YouTube, TikTok, Instagram) och diskografin är redan ifyllda. Facebook, spelningar, merch, nyhetsbrev och bokning är fortfarande platshållare. Hero-bilden ligger i `assets/hero.webp` (med `assets/hero.jpg` som fallback).
 
 Committa ändringarna till `main` så uppdateras den publicerade sidan automatiskt när GitHub Pages är påslaget.
 

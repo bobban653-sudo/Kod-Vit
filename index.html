@@ -6,12 +6,12 @@
     <title>KOD ᵛⁱᵗ — svensk rap</title>
     <meta
       name="description"
-      content="KOD VIT är svensk rap utan filter. Två röster. Två perspektiv. En gemensam verklighet."
+      content="KOD VIT är svensk rap utan filter. Musik byggd på liv, lojalitet och respekt."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bungee&family=Permanent+Marker&family=Rubik+Wet+Paint&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
@@ -46,10 +46,27 @@
     <main id="innehall">
       <!-- Hero: brand + latest release (artist-site pattern) -->
       <section class="hero" id="top" aria-label="Startsida">
-        <div class="concrete" aria-hidden="true"></div>
-        <div class="spray-haze" aria-hidden="true"></div>
+        <div class="hero-bg" aria-hidden="true">
+          <picture>
+            <source srcset="assets/hero.webp" type="image/webp" />
+            <img
+              class="hero-bg-img"
+              src="assets/hero.jpg"
+              alt=""
+              width="1280"
+              height="720"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
+          <div class="hero-bg-overlay"></div>
+          <div class="hero-grain"></div>
+          <div class="drip drip-a"></div>
+          <div class="drip drip-b"></div>
+          <div class="drip drip-c"></div>
+        </div>
         <div class="hero-inner">
-          <p class="hero-tag">svensk rap · utan filter</p>
+          <p class="hero-tag">svensk rap</p>
           <h1 class="hero-brand">
             KOD <span class="brand-vit">ᵛⁱᵗ</span>
           </h1>
@@ -63,7 +80,7 @@
               <span class="cover-label">album</span>
             </div>
             <div class="latest-body">
-              <p class="latest-kicker">Senaste släppet</p>
+              <p class="latest-kicker">NYTT SLÄPP</p>
               <h2 class="latest-title">Gangsters &amp; Gang</h2>
               <p class="latest-meta">Album · 14 september 2026</p>
               <div class="latest-actions">
@@ -356,15 +373,13 @@
           <h2 class="section-title"><span>Om</span></h2>
           <div class="about-copy">
             <p>
-              KOD VIT är svensk rap utan filter. Två röster. Två perspektiv. En
-              gemensam verklighet. Musiken rör sig mellan mörker, kärlek, ilska
-              och sådant som många tänker men får säga högt. Här finns
-              berättelser om relationer, samhället, gatan, konsekvenserna och
-              människorna bakom allt brus. KOD VIT handlar inte om att
+              KOD VIT är svensk rap utan filter. Musiken rör sig mellan mörker,
+              kärlek, ilska och sådant som många tänker men får säga högt. Här
+              finns berättelser om relationer, samhället, gatan, konsekvenserna
+              och människorna bakom allt brus. KOD VIT handlar inte om att
               romantisera våld, droger eller fasader. Det handlar om vad som
               finns bakom dem. Ibland hårt. Ibland nära. Ibland med glimten i
-              ögat. Men alltid med känslan först. KOD VIT — två röster. Ingen
-              fasad.
+              ögat. Men alltid med känslan först. KOD VIT — ingen fasad.
             </p>
           </div>
         </div>
@@ -422,9 +437,20 @@
               </a>
             </li>
             <li>
-              <a class="social-link is-placeholder" href="#">
+              <a
+                class="social-link"
+                href="https://www.instagram.com/kod.vit/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span class="social-name">Instagram</span>
-                <span class="social-handle">[Länk till Instagram]</span>
+                <span class="social-handle">@kod.vit</span>
+              </a>
+            </li>
+            <li>
+              <a class="social-link is-placeholder" href="#">
+                <span class="social-name">Facebook</span>
+                <span class="social-handle">[Länk till Facebook]</span>
               </a>
             </li>
           </ul>
@@ -505,6 +531,14 @@
               target="_blank"
               rel="noopener noreferrer"
               >Apple</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.instagram.com/kod.vit/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Instagram</a
             >
           </li>
         </ul>

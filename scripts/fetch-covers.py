@@ -290,35 +290,58 @@ def save_image(url: str, slug: str) -> dict:
     }
 
 
+def itunes_clean_title(name: str) -> str:
+    name = re.sub(
+        r"\s*-\s*(Single|EP|Album)\s*$", "", name, flags=re.I
+    ).strip()
+    return name
+
+
 def itunes_artwork_catalog() -> dict[str, str]:
-    """Map release title -> high-res artwork URL via Apple Search API."""
+    """Map cleaned release title -> high-res artwork via Apple Lookup/Search."""
     found: dict[str, str] = {}
-    queries = ["KOD VIT", "Kod Vit", "KODVIT"]
-    for q in queries:
-        r = SESSION.get(
-            "https://itunes.apple.com/search",
-            params={
-                "term": q,
-                "entity": "album",
-                "country": "se",
-                "limit": 50,
-            },
-            timeout=30,
-        )
-        if r.status_code != 200:
-            print("itunes status", r.status_code, q)
-            continue
-        for it in r.json().get("results") or []:
-            name = (it.get("collectionName") or "").strip()
+
+    def ingest(results: list) -> None:
+        for it in results or []:
+            # Prefer albums by this artist id when present
+            artist_id = str(it.get("artistId") or "")
+            if artist_id and artist_id != "6805008140":
+                continue
+            name = itunes_clean_title(it.get("collectionName") or "")
             art = it.get("artworkUrl100") or it.get("artworkUrl60")
             if not name or not art:
                 continue
-            # Request larger asset
             art = re.sub(r"/\d+x\d+bb", "/600x600bb", art)
             art = re.sub(r"100x100bb", "600x600bb", art)
-            found.setdefault(name, art)
+            found.setdefault(normalize(name), art)
             print("itunes", name, art)
-        time.sleep(0.2)
+
+    # Canonical catalog for this Apple Music artist
+    r = SESSION.get(
+        "https://itunes.apple.com/lookup",
+        params={"id": "6805008140", "entity": "album", "country": "se", "limit": 50},
+        timeout=30,
+    )
+    if r.status_code == 200:
+        ingest(r.json().get("results") or [])
+    else:
+        print("itunes lookup status", r.status_code)
+
+    # Title-specific searches as backup
+    for _, title, _ in RELEASES:
+        r = SESSION.get(
+            "https://itunes.apple.com/search",
+            params={
+                "term": f"{title} KOD VIT",
+                "entity": "album",
+                "country": "se",
+                "limit": 10,
+            },
+            timeout=30,
+        )
+        if r.status_code == 200:
+            ingest(r.json().get("results") or [])
+        time.sleep(0.15)
     return found
 
 
@@ -346,15 +369,18 @@ def main() -> None:
                 source = "spotify-oembed"
                 entry["oembed_title"] = data.get("title")
             if not thumb:
-                # Official artwork fallback via Apple catalog when Spotify album id unknown
-                art = match_url(title, itunes)  # reuse title matcher against itunes map
-                # match_url expects spotify-like dict values; works for any url map
+                n = normalize(title)
+                art = itunes.get(n)
                 if not art:
-                    n = normalize(title)
+                    # Allow mild suffix/prefix differences only
                     for k, v in itunes.items():
-                        if n == normalize(k) or n in normalize(k) or normalize(k) in n:
-                            art = v
-                            break
+                        if n == k or n in k or k in n:
+                            # Require shared significant token count
+                            ta = set(re.sub(r"[&/]", " ", n).split()) - {"the", "a"}
+                            tb = set(re.sub(r"[&/]", " ", k).split()) - {"the", "a"}
+                            if ta and ta <= tb or tb and tb <= ta:
+                                art = v
+                                break
                 if not art:
                     raise RuntimeError(f"No cover source for {title}")
                 thumb = art

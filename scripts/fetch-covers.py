@@ -276,11 +276,11 @@ def save_image(url: str, slug: str) -> dict:
     r = SESSION.get(url, timeout=60)
     r.raise_for_status()
     im = Image.open(BytesIO(r.content)).convert("RGB")
-    im.thumbnail((640, 640), Image.Resampling.LANCZOS)
+    im.thumbnail((480, 480), Image.Resampling.LANCZOS)
     webp = OUT / f"{slug}.webp"
     jpg = OUT / f"{slug}.jpg"
-    im.save(webp, "WEBP", quality=82, method=6)
-    im.save(jpg, "JPEG", quality=85, optimize=True)
+    im.save(webp, "WEBP", quality=72, method=6)
+    im.save(jpg, "JPEG", quality=80, optimize=True)
     return {
         "webp": str(webp).replace("\\", "/"),
         "jpg": str(jpg).replace("\\", "/"),
@@ -407,7 +407,9 @@ def main() -> None:
                 }
             )
             print(f"COVER_B64_BEGIN:{slug}")
-            print(b64)
+            # Chunk so GitHub Actions log retention keeps the full payload
+            for i in range(0, len(b64), 80):
+                print(f"B64:{b64[i:i+80]}")
             print(f"COVER_B64_END:{slug}")
             print("OK", slug, source, thumb, entry["spotify_url"])
         except Exception as exc:  # noqa: BLE001

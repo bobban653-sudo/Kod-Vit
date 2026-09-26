@@ -290,8 +290,41 @@ def save_image(url: str, slug: str) -> dict:
     }
 
 
+def itunes_artwork_catalog() -> dict[str, str]:
+    """Map release title -> high-res artwork URL via Apple Search API."""
+    found: dict[str, str] = {}
+    queries = ["KOD VIT", "Kod Vit", "KODVIT"]
+    for q in queries:
+        r = SESSION.get(
+            "https://itunes.apple.com/search",
+            params={
+                "term": q,
+                "entity": "album",
+                "country": "se",
+                "limit": 50,
+            },
+            timeout=30,
+        )
+        if r.status_code != 200:
+            print("itunes status", r.status_code, q)
+            continue
+        for it in r.json().get("results") or []:
+            name = (it.get("collectionName") or "").strip()
+            art = it.get("artworkUrl100") or it.get("artworkUrl60")
+            if not name or not art:
+                continue
+            # Request larger asset
+            art = re.sub(r"/\d+x\d+bb", "/600x600bb", art)
+            art = re.sub(r"100x100bb", "600x600bb", art)
+            found.setdefault(name, art)
+            print("itunes", name, art)
+        time.sleep(0.2)
+    return found
+
+
 def main() -> None:
     catalog = discover_catalog()
+    itunes = itunes_artwork_catalog()
     manifest = []
 
     for slug, title, year in RELEASES:
@@ -302,30 +335,44 @@ def main() -> None:
             "slug": slug,
             "title": title,
             "year": year,
-            "spotify_url": url,
+            "spotify_url": url or ARTIST_URL,
         }
         try:
-            if not url or "/album/" not in url:
-                raise RuntimeError(f"No album URL for {title}")
-            data = oembed(url)
-            thumb = data.get("thumbnail_url")
+            thumb = None
+            source = None
+            if url and "/album/" in url:
+                data = oembed(url)
+                thumb = data.get("thumbnail_url")
+                source = "spotify-oembed"
+                entry["oembed_title"] = data.get("title")
             if not thumb:
-                raise RuntimeError("missing thumbnail_url")
+                # Official artwork fallback via Apple catalog when Spotify album id unknown
+                art = match_url(title, itunes)  # reuse title matcher against itunes map
+                # match_url expects spotify-like dict values; works for any url map
+                if not art:
+                    n = normalize(title)
+                    for k, v in itunes.items():
+                        if n == normalize(k) or n in normalize(k) or normalize(k) in n:
+                            art = v
+                            break
+                if not art:
+                    raise RuntimeError(f"No cover source for {title}")
+                thumb = art
+                source = "itunes-artwork"
             paths = save_image(thumb, slug)
             b64 = paths.pop("webp_b64")
             entry.update(
                 {
-                    "oembed_title": data.get("title"),
                     "thumbnail_url": thumb,
+                    "source": source,
                     **paths,
                     "ok": True,
                 }
             )
-            # Emit machine-parseable payload for environments that cannot download artifacts
             print(f"COVER_B64_BEGIN:{slug}")
             print(b64)
             print(f"COVER_B64_END:{slug}")
-            print("OK", slug, thumb, url)
+            print("OK", slug, source, thumb, entry["spotify_url"])
         except Exception as exc:  # noqa: BLE001
             entry["ok"] = False
             entry["error"] = str(exc)

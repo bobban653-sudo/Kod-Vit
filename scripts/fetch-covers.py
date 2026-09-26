@@ -346,11 +346,22 @@ def itunes_artwork_catalog() -> dict[str, str]:
 
 
 def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--only", help="Fetch a single release slug")
+    args = parser.parse_args()
+
     catalog = discover_catalog()
     itunes = itunes_artwork_catalog()
     manifest = []
+    selected = RELEASES
+    if args.only:
+        selected = [r for r in RELEASES if r[0] == args.only]
+        if not selected:
+            raise SystemExit(f"Unknown slug {args.only}")
 
-    for slug, title, year in RELEASES:
+    for slug, title, year in selected:
         url = match_url(title, catalog)
         if not url:
             url = search_album_url(title)

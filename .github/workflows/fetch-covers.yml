@@ -13,6 +13,21 @@ permissions:
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        slug:
+          - gangsters-and-gang
+          - gangster-pa-wifi
+          - fel-sjalvbild
+          - fel-kassa
+          - hall-den-kvar
+          - nar-den-kanns-fardig
+          - ensam
+          - lampan-lyste
+          - where-the-road-meets-the-sun
+          - dar-ni-ar
+          - vitlinje
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -20,12 +35,12 @@ jobs:
           python-version: "3.12"
       - name: Install deps
         run: pip install pillow requests
-      - name: Fetch covers
-        run: python scripts/fetch-covers.py
-      - name: Upload covers
+      - name: Fetch one cover
+        run: python scripts/fetch-covers.py --only "${{ matrix.slug }}"
+      - name: Upload cover
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: covers
-          path: assets/covers/
+          name: cover-${{ matrix.slug }}
+          path: assets/covers/${{ matrix.slug }}.*
           if-no-files-found: warn

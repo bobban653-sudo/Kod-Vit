@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KODVIT</title>
+    <meta
+      name="description"
+      content="KODVIT — svenskt musikprojekt. [Kort beskrivning här]"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Unbounded:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#innehall">Hoppa till innehåll</a>
+
+    <header class="site-header">
+      <nav class="nav" aria-label="Huvudnavigering">
+        <a class="nav-brand" href="#top">KODVIT</a>
+        <ul class="nav-links">
+          <li><a href="#om">Om</a></li>
+          <li><a href="#musik">Musik</a></li>
+          <li><a href="#folj">Följ</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="innehall">
+      <section class="hero" id="top" aria-label="Startsida">
+        <div class="hero-atmosphere" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="hero-brand">KODVIT</p>
+          <h1 class="hero-title">[En mening om projektet här]</h1>
+          <p class="hero-lead">
+            [Kort stödjande mening om ljud, stil eller vad som kommer härnäst.]
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#musik">Lyssna</a>
+            <a
+              class="btn btn-ghost"
+              href="https://www.tiktok.com/@kodvit"
+              target="_blank"
+              rel="noopener noreferrer"
+              >TikTok @kodvit</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="om">
+        <div class="section-inner">
+          <h2>Om</h2>
+          <p class="section-lead">
+            [Kort text om KODVIT — bakgrund, sound och var projektet kommer
+            ifrån. Byt ut den här platshållaren mot riktig copy.]
+          </p>
+        </div>
+      </section>
+
+      <section class="section section-music" id="musik">
+        <div class="section-inner">
+          <h2>Musik</h2>
+          <p class="section-lead">
+            [Lägg till låtar, singlar eller spellistor här när de är klara.]
+          </p>
+          <ul class="track-list">
+            <li>
+              <article class="track">
+                <span class="track-index" aria-hidden="true">01</span>
+                <div class="track-body">
+                  <h3>[Låtnamn här]</h3>
+                  <p>[Kort rad om låten eller releaseinfo]</p>
+                </div>
+                <a class="track-link" href="#">[Länk till låt]</a>
+              </article>
+            </li>
+            <li>
+              <article class="track">
+                <span class="track-index" aria-hidden="true">02</span>
+                <div class="track-body">
+                  <h3>[Låtnamn här]</h3>
+                  <p>[Kort rad om låten eller releaseinfo]</p>
+                </div>
+                <a class="track-link" href="#">[Länk till låt]</a>
+              </article>
+            </li>
+            <li>
+              <article class="track">
+                <span class="track-index" aria-hidden="true">03</span>
+                <div class="track-body">
+                  <h3>[Låtnamn här]</h3>
+                  <p>[Kort rad om låten eller releaseinfo]</p>
+                </div>
+                <a class="track-link" href="#">[Länk till låt]</a>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="folj">
+        <div class="section-inner">
+          <h2>Följ</h2>
+          <p class="section-lead">
+            Håll koll på KODVIT — börja med TikTok, fyll i resten när kontona
+            finns.
+          </p>
+          <ul class="social-list">
+            <li>
+              <a
+                class="social-link"
+                href="https://www.tiktok.com/@kodvit"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="social-name">TikTok</span>
+                <span class="social-handle">@kodvit</span>
+              </a>
+            </li>
+            <li>
+              <a class="social-link is-placeholder" href="#">
+                <span class="social-name">Spotify</span>
+                <span class="social-handle">[Länk till Spotify]</span>
+              </a>
+            </li>
+            <li>
+              <a class="social-link is-placeholder" href="#">
+                <span class="social-name">YouTube</span>
+                <span class="social-handle">[Länk till YouTube]</span>
+              </a>
+            </li>
+            <li>
+              <a class="social-link is-placeholder" href="#">
+                <span class="social-name">Instagram</span>
+                <span class="social-handle">[Länk till Instagram]</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p class="footer-brand">KODVIT</p>
+        <p class="footer-note">
+          © <span id="year"></span> KODVIT.
+          <span class="footer-placeholder"
+            >[Kontakt eller övrig footertext här]</span
+          >
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = String(
+        new Date().getFullYear()
+      );
+    </script>
+  </body>
+</html>

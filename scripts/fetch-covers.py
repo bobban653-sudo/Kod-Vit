@@ -106,13 +106,103 @@ def search_album_url(title: str) -> str | None:
     return None
 
 
+def spotify_access_token() -> str | None:
+    """Pull anonymous access token embedded in open.spotify.com HTML."""
+    try:
+        html = SESSION.get("https://open.spotify.com/", timeout=30).text
+    except Exception as exc:  # noqa: BLE001
+        print("token page fail", exc)
+        return None
+    m = re.search(r'"accessToken"\s*:\s*"([^"]+)"', html)
+    if m:
+        return m.group(1)
+    m = re.search(r"accessToken\\?\":\\?\"([^\"]+)\\?\"", html)
+    return m.group(1) if m else None
+
+
+def api_search_albums(token: str, title: str) -> list[tuple[str, str]]:
+    """Return list of (album_name, album_url) via Spotify Web API search."""
+    r = SESSION.get(
+        "https://api.spotify.com/v1/search",
+        params={
+            "q": f"album:{title} artist:{ARTIST}",
+            "type": "album",
+            "limit": 10,
+            "market": "SE",
+        },
+        headers={"Authorization": f"Bearer {token}"},
+        timeout=30,
+    )
+    if r.status_code != 200:
+        # looser query
+        r = SESSION.get(
+            "https://api.spotify.com/v1/search",
+            params={"q": f"{title} {ARTIST}", "type": "album", "limit": 10, "market": "SE"},
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=30,
+        )
+    if r.status_code != 200:
+        print("api search status", r.status_code, title, r.text[:200])
+        return []
+    items = r.json().get("albums", {}).get("items", []) or []
+    out = []
+    for it in items:
+        name = it.get("name") or ""
+        url = (it.get("external_urls") or {}).get("spotify") or ""
+        if url:
+            out.append((name, url))
+    return out
+
+
+def api_artist_albums(token: str) -> dict[str, str]:
+    found: dict[str, str] = {}
+    url = "https://api.spotify.com/v1/artists/22NpzyR8mc5NOBXAt6Rv3b/albums"
+    params = {
+        "include_groups": "album,single,appears_on,compilation",
+        "market": "SE",
+        "limit": 50,
+    }
+    while url:
+        r = SESSION.get(
+            url,
+            params=params,
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=30,
+        )
+        params = None
+        if r.status_code != 200:
+            print("artist albums status", r.status_code, r.text[:200])
+            break
+        data = r.json()
+        for it in data.get("items") or []:
+            name = (it.get("name") or "").strip()
+            link = (it.get("external_urls") or {}).get("spotify")
+            if name and link:
+                found.setdefault(name, link)
+                print("api album", name, link)
+        url = data.get("next")
+        time.sleep(0.2)
+    return found
+
+
 def discover_catalog() -> dict[str, str]:
     found: dict[str, str] = dict(KNOWN)
+    token = spotify_access_token()
+    print("token", "yes" if token else "no")
+    if token:
+        found.update(api_artist_albums(token))
+        for _, title, _ in RELEASES:
+            if match_url(title, found):
+                continue
+            for name, url in api_search_albums(token, title):
+                found.setdefault(name, url)
+                print("api search hit", name, url)
+            time.sleep(0.2)
+
     pages = [
         ARTIST_URL,
         f"{ARTIST_URL}/discography/all",
-        f"{ARTIST_URL}/discography/album",
-        f"{ARTIST_URL}/discography/single",
+        f"https://open.spotify.com/embed/artist/22NpzyR8mc5NOBXAt6Rv3b",
     ]
     for page in pages:
         try:

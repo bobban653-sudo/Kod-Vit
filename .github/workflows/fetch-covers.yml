@@ -17,17 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         slug:
-          - gangsters-and-gang
-          - gangster-pa-wifi
-          - fel-sjalvbild
-          - fel-kassa
-          - hall-den-kvar
-          - nar-den-kanns-fardig
           - ensam
           - lampan-lyste
           - where-the-road-meets-the-sun
-          - dar-ni-ar
-          - vitlinje
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

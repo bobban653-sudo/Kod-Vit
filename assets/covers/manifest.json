@@ -1,0 +1,90 @@
+[
+  {
+    "slug": "gangsters-and-gang",
+    "title": "Gangsters & Gang",
+    "source": "spotify-oembed",
+    "webp": "assets/covers/gangsters-and-gang.webp",
+    "jpg": "assets/covers/gangsters-and-gang.jpg",
+    "bytes": 12708
+  },
+  {
+    "slug": "gangster-pa-wifi",
+    "title": "Gangster på Wifi",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/gangster-pa-wifi.webp",
+    "jpg": "assets/covers/gangster-pa-wifi.jpg",
+    "bytes": 14444
+  },
+  {
+    "slug": "fel-sjalvbild",
+    "title": "Fel självbild",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/fel-sjalvbild.webp",
+    "jpg": "assets/covers/fel-sjalvbild.jpg",
+    "bytes": 15458
+  },
+  {
+    "slug": "fel-kassa",
+    "title": "Fel kassa",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/fel-kassa.webp",
+    "jpg": "assets/covers/fel-kassa.jpg",
+    "bytes": 20426
+  },
+  {
+    "slug": "hall-den-kvar",
+    "title": "Håll den kvar",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/hall-den-kvar.webp",
+    "jpg": "assets/covers/hall-den-kvar.jpg",
+    "bytes": 17962
+  },
+  {
+    "slug": "nar-den-kanns-fardig",
+    "title": "När den känns färdig",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/nar-den-kanns-fardig.webp",
+    "jpg": "assets/covers/nar-den-kanns-fardig.jpg",
+    "bytes": 18816
+  },
+  {
+    "slug": "ensam",
+    "title": "Ensam",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/ensam.webp",
+    "jpg": "assets/covers/ensam.jpg",
+    "bytes": 27292
+  },
+  {
+    "slug": "lampan-lyste",
+    "title": "Lampan lyste",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/lampan-lyste.webp",
+    "jpg": "assets/covers/lampan-lyste.jpg",
+    "bytes": 37478
+  },
+  {
+    "slug": "where-the-road-meets-the-sun",
+    "title": "Where the road meets the sun",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/where-the-road-meets-the-sun.webp",
+    "jpg": "assets/covers/where-the-road-meets-the-sun.jpg",
+    "bytes": 25006
+  },
+  {
+    "slug": "dar-ni-ar",
+    "title": "Där ni är",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/dar-ni-ar.webp",
+    "jpg": "assets/covers/dar-ni-ar.jpg",
+    "bytes": 25416
+  },
+  {
+    "slug": "vitlinje",
+    "title": "Vitlinje",
+    "source": "itunes-artwork",
+    "webp": "assets/covers/vitlinje.webp",
+    "jpg": "assets/covers/vitlinje.jpg",
+    "bytes": 22086
+  }
+]

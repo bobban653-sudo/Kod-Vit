@@ -4,8 +4,11 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - ".github/workflows/fetch-covers.yml"
       - "scripts/fetch-covers.py"
+      - ".github/workflows/fetch-covers.yml"
+
+permissions:
+  contents: read
 
 jobs:
   fetch:
@@ -20,18 +23,9 @@ jobs:
       - name: Fetch covers
         run: python scripts/fetch-covers.py
       - name: Upload covers
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: covers
           path: assets/covers/
-      - name: Commit covers if changed
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/covers assets/covers/manifest.json || true
-          if git diff --staged --quiet; then
-            echo "No cover changes"
-          else
-            git commit -m "Add Spotify cover art assets from oEmbed"
-            git push
-          fi
+          if-no-files-found: warn

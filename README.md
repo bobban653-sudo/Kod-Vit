@@ -8,9 +8,17 @@ här är en annan text.
 Sidan är statisk och ligger i rotmappen:
 
 - `index.html` — innehåll och sektioner
-- `style.css` — design
+- `style.css` / `main.js` — design och interaktion
+- `assets/` — hero, omslag, ikoner
 
-Byt ut all text inom hakparenteser, till exempel `[Videotitel här]` och `[bokning@…]`, mot riktiga namn och länkar. Verifierade länkar (Spotify, Apple Music, YouTube, TikTok, Instagram) och diskografin är redan ifyllda. Facebook, spelningar, merch, nyhetsbrev och bokning är fortfarande platshållare. Hero-bilden ligger i `assets/hero.webp` (med `assets/hero.jpg` som fallback).
+Gömda sektioner (Video, Spelningar, Merch, Nyhetsbrev, Kontakt, Facebook) ligger som HTML-kommentarer i `index.html` och kan slås på när riktigt innehåll finns.
+
+För att hämta om riktiga Spotify-omslag saknas eller behöver uppdateras:
+
+```bash
+pip install pillow requests
+python scripts/fetch-covers.py
+```
 
 Committa ändringarna till `main` så uppdateras den publicerade sidan automatiskt när GitHub Pages är påslaget.
 

@@ -107,17 +107,39 @@ def search_album_url(title: str) -> str | None:
 
 
 def spotify_access_token() -> str | None:
-    """Pull anonymous access token embedded in open.spotify.com HTML."""
+    """Pull anonymous access token from Spotify web player endpoints."""
+    endpoints = [
+        "https://open.spotify.com/get_access_token?reason=transport&productType=web_player",
+        "https://open.spotify.com/get_access_token",
+    ]
+    for endpoint in endpoints:
+        try:
+            r = SESSION.get(endpoint, timeout=30)
+            if r.status_code == 200 and "accessToken" in r.text:
+                data = r.json()
+                token = data.get("accessToken")
+                if token:
+                    print("token via", endpoint)
+                    return token
+        except Exception as exc:  # noqa: BLE001
+            print("token endpoint fail", endpoint, exc)
+
     try:
         html = SESSION.get("https://open.spotify.com/", timeout=30).text
     except Exception as exc:  # noqa: BLE001
         print("token page fail", exc)
         return None
-    m = re.search(r'"accessToken"\s*:\s*"([^"]+)"', html)
-    if m:
-        return m.group(1)
-    m = re.search(r"accessToken\\?\":\\?\"([^\"]+)\\?\"", html)
-    return m.group(1) if m else None
+    for pattern in (
+        r'"accessToken"\s*:\s*"([^"]+)"',
+        r"accessToken\\?\":\\?\"([^\"]+)\\?\"",
+        r'"accessToken":"([^"]+)"',
+    ):
+        m = re.search(pattern, html)
+        if m:
+            print("token via html")
+            return m.group(1)
+    print("token html snippet", html[:300].replace("\n", " "))
+    return None
 
 
 def api_search_albums(token: str, title: str) -> list[tuple[str, str]]:
